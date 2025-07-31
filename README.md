@@ -1,17 +1,34 @@
-# 🏡 Immo Agent – Automatische scraper voor Immoweb
+# 🏡 Immo Agent – AI Mail Analyzer voor Vastgoed
 
-Deze tool verzamelt automatisch links naar huizen en appartementen op Immoweb.be op basis van dynamische regiozones. De gevonden zoekertjes kunnen vervolgens door een AI-module beoordeeld worden op relevantie.
+Deze tool verzamelt automatisch e-mails van vastgoedwebsites (zoals Immoweb, Zimmo, Immoscoop) en analyseert deze met AI om enkel de panden te tonen die voldoen aan jouw criteria. Geen scraping nodig – we werken volledig via e-mailintegratie en AI-filtering.
+
+---
+
+## ✅ Functionaliteit
+
+- Haal automatisch e-mails op uit een Gmail-inbox via de **Gmail API**.
+- Analyseer inhoud met **Claude (Anthropic) via LangChain**.
+- Filter panden op:
+  - Regiozones
+  - Budget
+  - Type (huis/appartement)
+- Genereer een dagelijks rapport in **Markdown**.
 
 ---
 
 ## 🔧 Setup
 
-### 1. Virtuele omgeving instellen
+### 1. Virtuele omgeving activeren
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate  # macOS/Linux
-# .\venv\Scripts\activate  # Windows
+python3 -m venv .venv
+source .venv/bin/activate  # macOS/Linux
+# .\.venv\Scripts\activate  # Windows
+```
+
+Controleer:
+```bash
+which python  # Moet .venv tonen
 ```
 
 ### 2. Vereisten installeren
@@ -20,94 +37,75 @@ source venv/bin/activate  # macOS/Linux
 pip install -r requirements.txt
 ```
 
-### 3. Playwright installeren
+### 3. Gmail API configureren
+
+1. Ga naar [Google Cloud Console](https://console.cloud.google.com/).
+2. Maak een project aan en activeer de **Gmail API**.
+3. Download `credentials.json` en plaats dit in de root van het project.
+4. Start de OAuth-flow:
 
 ```bash
-playwright install
+python email_pipeline/gmail_auth.py
 ```
 
-### 4. CSV-bestanden toevoegen
+Dit opent een browser voor toestemming. Daarna wordt `token.pickle` aangemaakt.
 
-Plaats het bestand `Conversion_Postal_code_Refnis_code_va01012025.csv` in de hoofdmap van je project. Dit bestand bevat de mapping van gemeentenaam naar postcode.
-Je kunt dit downloaden via de officiële site van Statbel:
-👉 https://statbel.fgov.be/nl/over-statbel/methodologie/classificaties/geografie
+### 4. API-sleutels instellen
+
+Maak een `.env` bestand in de root:
+```
+ANTHROPIC_API_KEY=sk-ant-xxxxx
+```
 
 ---
 
 ## 🚀 Scripts
 
-### 1. `gemeente_to_postcode.py`
+### 1. E-mails ophalen
 
-Zet gemeentenaam om naar postcode(s) op basis van de conversie-CSV.
+Haalt de laatste e-mails op die voldoen aan een query (bv. "subject:immoweb"):
 
-**Gebruik:**
 ```bash
-python gemeente_to_postcode.py
+python email_pipeline/fetch_emails.py
 ```
 
-**Output voorbeeld:**
+### 2. Analyse met AI
+
+Laat Claude via LangChain e-mails scannen op jouw criteria:
+
 ```bash
-['9450', '9420', '1785']
+python email_pipeline/analyze_emails.py
 ```
 
-### 2. `scrape_links_per_zone.py`
+### 3. Rapport genereren
 
-Scrapet Immoweb-links per dynamische zone (bv. Zone 1, Zone 2...) op basis van een `zones.json`-bestand.
+Genereert een Markdown-rapport met alle matches:
 
-**Gebruik:**
 ```bash
-python scrape_links_per_zone.py
+python email_pipeline/generate_report.py
 ```
 
-Zorg dat `zones.json` aanwezig is en de structuur volgt zoals hieronder:
-```json
-{
-  "Zone 1 – Aalst-Haaltert": ["Haaltert", "Erpe-Mere", "Denderleeuw", "Liedekerke"],
-  "Zone 2 – Aarschot-Diest": ["Bekkevoort", "Scherpenheuvel-Zichem", "Testelt", "Zelem"],
-  "Zone 3 – Opwijk-Merchtem": ["Asse", "Opwijk", "Merchtem", "Wolvertem"]
-}
+Output:
 ```
-
-De postcodes worden opgevraagd via `gemeente_to_postcode.py` en automatisch in de Immoweb-URL geplaatst in dit formaat:
-```
-https://www.immoweb.be/nl/zoeken/huis/te-koop?countries=BE&postalCodes=BE-9450,BE-9420
+reports/daily_2025-07-31.md
 ```
 
 ---
 
-## 🧪 Testen
+## 🗺 Toekomstige uitbreidingen
 
-Test de postcodeconversie los via:
-```bash
-python gemeente_to_postcode.py
-```
-
-Je kunt daar testgemeenten toevoegen in de `__main__` sectie:
-```python
-test_gemeenten = ["Haaltert", "Erpe-Mere", "Merchtem", "Lennik"]
-```
-
----
-
-## 🗺 Toekomst
-
-- Scraping uitbreiden met extra filters (prijs, oppervlakte, aantal slaapkamers)
-- AI-module toevoegen die inschat of een zoekertje relevant is
-- Zones intekenen op kaart via GeoPandas
-- Automatische dagelijkse mailing of dashboard
+- Automatische dagelijkse mail met resultaten
+- Feedback-loop voor betere AI-selectie
+- Extra integraties (Notion, Confluence, dashboards)
 
 ---
 
 ## 👨‍💻 Ontwikkelnotities
 
 - Werkt op macOS
-- Uitvoering gebeurt in virtuele omgeving via:
-```bash
-source venv/bin/activate
-```
-- Playwright wordt gebruikt voor scraping in headless Chromium
-- Documentatie wordt continu mee opgebouwd
+- Alle scripts draaien binnen `.venv`
+- Documentatie wordt continu aangevuld tijdens ontwikkeling
 
 ---
 
-Veel succes met het zoeken naar je ideale woonst! 🏠
+Veel succes met het vinden van je ideale woning! 🏠

@@ -1,9 +1,19 @@
+# Gmail API integratie
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
+
+# AI en LangChain
+langchain
+anthropic
+
+# Configuratie
+python-dotenv
+
+# HTML parsing (indien nodig voor email content)
 beautifulsoup4==4.13.4
-certifi==2025.6.15
-charset-normalizer==3.4.2
-idna==3.10
 requests==2.32.4
-soupsieve==2.7
-typing_extensions==4.14.1
-urllib3==2.5.0
-playwright>=1.44.0
+
+# Optioneel: fallback voor IMAP
+imap-tools

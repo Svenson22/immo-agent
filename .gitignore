@@ -1,4 +1,12 @@
-venv/
+# Python cache
 __pycache__/
-*.pyc
+
+# Virtual environment
+.venv/
+
+# Gmail tokens & credentials
+token.pickle
+credentials.json
+
+# OS files
 .DS_Store
