@@ -10,3 +10,6 @@ credentials.json
 
 # OS files
 .DS_Store
+
+# Environment variables (API keys en gevoelige info)
+.env
