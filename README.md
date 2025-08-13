@@ -1,43 +1,43 @@
-# 🏡 Immo Agent – AI Mail Analyzer voor Vastgoed Nieuwsbrieven en Alerts
+# 🏡 Immo Agent – AI personal analyzer for house and apartment search
 
-Deze tool werkt volledig via het automatisch ophalen van nieuwsbrieven en alerts uit je Gmail-inbox, zonder scraping. Dankzij AI-filtering worden alleen de panden getoond die voldoen aan jouw criteria, zodat je snel en efficiënt je ideale woning vindt.
-
----
-
-## 🛠 Procesflow (functioneel)
-
-1. Gmail filters en labels worden ingesteld om vastgoednieuwsbrieven en alerts automatisch te verzamelen.
-2. Het systeem haalt dagelijks de gelabelde e-mails op via de Gmail API.
-3. Harde filters worden toegepast op regiozones, prijs, type woning en aantal slaapkamers.
-4. AI analyseert de resterende panden, geeft een score en een motivatie voor selectie.
-5. Er wordt een dagelijks overzicht gegenereerd in meerdere formaten: Markdown, CSV, Google Sheets en Notion.
-6. Rapporten kunnen eenvoudig worden gedeeld of verder verwerkt.
-
-Voor een visuele weergave van deze flow, zie de diagrammen in de documentatiemap.
+This tool works entirely by automatically fetching newsletters and alerts from your Gmail inbox, without scraping. Thanks to AI filtering, only properties that meet your criteria are shown, allowing you to quickly and efficiently find your ideal home.
 
 ---
 
-## ✅ Functionaliteit
+## 🛠 Process Flow (functional)
 
-- Gebruik van Gmail labels en filters om vastgoednieuwsbrieven en alerts automatisch te verzamelen.
-- Automatisch ophalen van gelabelde e-mails via de Gmail API.
-- Harde filters op:
-  - Regiozones
-  - Prijs
-  - Type woning (huis/appartement)
-  - Aantal slaapkamers
-- AI-score en motivatie per pand voor betere selectie.
-- Dagelijks overzicht in verschillende formaten:
-  - Markdown-rapport
-  - CSV-bestand
-  - Google Sheets integratie
-  - Notion integratie
+1. Gmail filters and labels are set up to automatically collect real estate newsletters and alerts.
+2. The system retrieves the labeled emails daily via the Gmail API.
+3. Hard filters are applied on region zones, price, property type, and number of bedrooms.
+4. AI analyzes the remaining properties, provides a score and a motivation for selection.
+5. A daily overview is generated in multiple formats: Markdown, CSV, Google Sheets, and Notion.
+6. Reports can be easily shared or further processed.
+
+For a visual representation of this flow, see the diagrams in the documentation folder.
+
+---
+
+## ✅ Functionality
+
+- Use of Gmail labels and filters to automatically collect real estate newsletters and alerts.
+- Automatic retrieval of labeled emails via the Gmail API.
+- Hard filters on:
+  - Region zones
+  - Price
+  - Property type (house/apartment)
+  - Number of bedrooms
+- AI score and motivation per property for better selection.
+- Daily overview in various formats:
+  - Markdown report
+  - CSV file
+  - Google Sheets integration
+  - Notion integration
 
 ---
 
 ## 🔧 Setup
 
-### 1. Virtuele omgeving activeren
+### 1. Activate virtual environment
 
 ```bash
 python3 -m venv .venv
@@ -45,77 +45,77 @@ source .venv/bin/activate  # macOS/Linux
 # .\.venv\Scripts\activate  # Windows
 ```
 
-Controleer:
+Check:
 ```bash
-which python  # Moet .venv tonen
+which python  # Should show .venv
 ```
 
-### 2. Vereisten installeren
+### 2. Install requirements
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Gmail API configureren
+### 3. Configure Gmail API
 
-1. Ga naar [Google Cloud Console](https://console.cloud.google.com/).
-2. Maak een project aan en activeer de **Gmail API**.
-3. Download `credentials.json` en plaats dit in de root van het project.
-4. Maak in Gmail filters en labels aan om vastgoednieuwsbrieven en alerts automatisch te herkennen en te labelen (bijv. label `ImmoAgent`).
-5. Start de OAuth-flow:
+1. Go to [Google Cloud Console](https://console.cloud.google.com/).
+2. Create a project and enable the **Gmail API**.
+3. Download `credentials.json` and place it in the root of the project.
+4. Create Gmail filters and labels to automatically recognize and label real estate newsletters and alerts (e.g., label `ImmoAgent`).
+5. Start the OAuth flow:
 
 ```bash
 python scripts/test_gmail.py
 ```
 
-Dit opent een browser voor toestemming. Daarna wordt `token.pickle` aangemaakt.
+This will open a browser for authorization. Afterwards, `token.pickle` will be created.
 
-### 4. API-sleutels instellen
+### 4. Set API keys
 
-Maak een `.env` bestand in de root met de volgende variabelen:
+Create a `.env` file in the root with the following variables:
 
 ```
 ANTHROPIC_API_KEY=sk-ant-xxxxx
 OPENAI_API_KEY=sk-openai-xxxxx
 ```
 
-Andere API-sleutels kunnen later toegevoegd worden voor extra integraties.
+Other API keys can be added later for additional integrations.
 
 ---
 
-## 🚀 Dagelijkse run
+## 🚀 Daily run
 
-Gebruik het hoofdscript om dagelijks het volledige proces te draaien:
+Use the main script to run the full process daily:
 
 ```bash
-python run_daily_digest.py --zones "Brussel, Antwerpen" --top 10
+python run_daily_digest.py --zones "Brussels, Antwerp" --top 10
 ```
 
 Parameters:
 
-- `--zones`: filter op regiozones (komma-gescheiden lijst).
-- `--top`: aantal topresultaten per dag.
+- `--zones`: filter by region zones (comma-separated list).
+- `--top`: number of top results per day.
 
-Losse scripts in `scripts/` zijn beschikbaar voor debuggen en ontwikkeling, maar het hoofdproces verloopt via `run_daily_digest.py`.
-
----
-
-## 🗺 Toekomstige uitbreidingen
-
-- Automatische dagelijkse e-maildistributie van de rapporten.
-- Feedback-loop voor continue verbetering van AI-selectie.
-- Multi-model routering om verschillende AI-modellen te combineren.
-- Integraties met Notion, Google Sheets en dashboards voor betere visualisatie en samenwerking.
+Individual scripts in `scripts/` are available for debugging and development, but the main process runs via `run_daily_digest.py`.
 
 ---
 
-## 👨‍💻 Ontwikkelnotities
+## 🗺 Future extensions
 
-- Werkt op macOS en Linux.
-- Alle scripts draaien binnen de `.venv` virtuele omgeving.
-- Documentatie wordt continu aangevuld tijdens ontwikkeling.
-- Focus ligt op gebruiksvriendelijkheid en uitbreidbaarheid.
+- Automatic daily email distribution of the reports.
+- Feedback loop for continuous improvement of AI selection.
+- Multi-model routing to combine different AI models.
+- Integrations with Notion, Google Sheets, and dashboards for better visualization and collaboration.
 
 ---
 
-Veel succes met het vinden van je ideale woning! 🏠
+## 👨‍💻 Development notes
+
+- Works on macOS and Linux.
+- All scripts run within the `.venv` virtual environment.
+- Documentation is continuously updated during development.
+- Focus is on user-friendliness and extensibility.
+
+---
+
+Good luck finding your ideal home! 🏠

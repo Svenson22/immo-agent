@@ -2,6 +2,7 @@ from __future__ import annotations
 import json
 from datetime import datetime, timezone
 from typing import List, Dict, Any, Optional
+from google.auth.transport.requests import Request
 
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -32,10 +33,10 @@ def _label_id(service, label_name: str) -> Optional[str]:
     return None
 
 def list_message_ids_with_label(service, label_name: str) -> List[str]:
-    """Haalt alle messageIds op met het opgegeven label. We filteren later lokaal op 'nieuw'."""
+    """Retrieves all message IDs with the specified label. We filter locally on 'new' later."""
     lbl_id = _label_id(service, label_name)
     if not lbl_id:
-        raise RuntimeError(f"Gmail label '{label_name}' niet gevonden. Controleer ingest/config.py.")
+        raise RuntimeError(f"Gmail label '{label_name}' not found. Check ingest/config.py.")
     msg_ids: List[str] = []
     page_token = None
     while True:

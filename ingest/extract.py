@@ -10,9 +10,9 @@ PRICE_REGEX = re.compile(r"(€|\bEUR\b)\s?[\d\s\.\,]+", re.IGNORECASE)
 def _clean_url(u: str) -> str:
     try:
         p = urlparse(u)
-        # verwijder tracking
+        # remove tracking parameters
         qs = [(k, v) for k, v in parse_qsl(p.query) if not k.lower().startswith(("utm_", "mc_", "trk", "fbclid"))]
-        return urlunparse((p.scheme, p.netloc, p.path, p.params, urlencode(qs), ""))  # zonder fragment
+        return urlunparse((p.scheme, p.netloc, p.path, p.params, urlencode(qs), ""))  # without fragment
     except Exception:
         return u
 
@@ -24,7 +24,7 @@ def parse_message(msg: Dict[str, Any]) -> Dict[str, Any]:
     dt = parsedate_to_datetime(date_raw) if date_raw else None
     internal_date = int(msg.get("internalDate", "0"))
 
-    # Body ophalen (pref: HTML; fallback: text/plain)
+    # Retrieve body (prefer HTML; fallback to text/plain)
     parts = []
     def walk(p):
         mime = p.get("mimeType", "")
@@ -48,23 +48,23 @@ def parse_message(msg: Dict[str, Any]) -> Dict[str, Any]:
         elif mime == "text/plain" and not text:
             text = content
 
-    # Tekst: indien HTML beschikbaar → naar platte tekst
+    # Text: if HTML available → convert to plain text
     main_text = text
     links: List[str] = []
     if html:
         soup = BeautifulSoup(html, "lxml")
-        # verzamel links
+        # collect links
         for a in soup.find_all("a", href=True):
             links.append(_clean_url(a["href"]))
-        # tekst
+        # remove script and style tags
         for tag in soup(["script", "style"]):
             tag.decompose()
         main_text = soup.get_text(separator=" ", strip=True)
     main_text = re.sub(r"\s{2,}", " ", main_text or "").strip()
 
-    # Prijzen detecteren
+    # Detect prices
     prices = PRICE_REGEX.findall(main_text)
-    # PRICE_REGEX met findall geeft tuple (symbool,). Pak volledige matches via finditer:
+    # PRICE_REGEX with findall returns tuple (symbol,). Get full matches via finditer:
     prices_full = []
     for m in re.finditer(PRICE_REGEX, main_text):
         prices_full.append(m.group(0))
@@ -77,7 +77,7 @@ def parse_message(msg: Dict[str, Any]) -> Dict[str, Any]:
         "internal_date": internal_date,
         "datetime_parsed_iso": dt.isoformat() if dt else None,
         "text": main_text,
-        "links": list(dict.fromkeys(links)),   # unieke volgorde
+        "links": list(dict.fromkeys(links)),   # unique in order
         "prices": prices_full,
         "size_estimate": msg.get("sizeEstimate"),
         "label_ids": msg.get("labelIds", []),
