@@ -1,0 +1,27 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv/
+
+# Gmail tokens & credentials
+config/token.json
+config/token.pickle
+config/credentials.json
+
+# Oude tokens (indien nog aanwezig, voor cleanup)
+token.pickle
+credentials.json
+
+# OS files
+.DS_Store
+
+# Environment variables
+.env
+.env.*
+
+# Data & logs
+data/raw/
+data/state.json
+logs/
