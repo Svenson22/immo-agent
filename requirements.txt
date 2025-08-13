@@ -1,0 +1,22 @@
+# Gmail API integratie
+google-api-python-client>=2.170,<3
+google-auth>=2.30
+google-auth-oauthlib>=1.2
+google-auth-httplib2>=0.2.0
+
+# HTML parsing voor e-mailcontent
+beautifulsoup4==4.13.4
+lxml>=5
+html5lib>=1.1
+python-dateutil>=2.9
+
+# Config (optioneel)
+python-dotenv>=1.0
+
+# --- Later / optioneel ---
+# AI en LangChain (voor classificatie/ranking in latere stap)
+# langchain>=0.3
+# anthropic>=0.60
+
+# IMAP fallback (enkel nodig als je niet via Gmail API werkt)
+# imap-tools>=1.0
