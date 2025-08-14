@@ -25,4 +25,7 @@ credentials.json
 data/raw/
 data/state.json
 logs/
-data/staged/
+
+# Data outputs
+/data/*
+!/data/.gitkeep

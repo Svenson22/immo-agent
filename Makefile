@@ -26,3 +26,14 @@ filter-all-nlfr:
 .PHONY: filter-day
 filter-day:
 	python -m src.filter.run_filter_4a --in-dir data/staged/split --out-dir data/staged/filtered
+
+.PHONY: split-cards enrich-shortlist propose
+
+split-cards:
+	@echo "[TODO] split-cards: LLM card extraction (stap 3B)"
+
+enrich-shortlist:
+	@echo "[TODO] enrich-shortlist: resolve & scrape kanshebbers (stap 4B)"
+
+propose:
+	@echo "[TODO] propose: finale ranking/voorstel (stap 5)"
