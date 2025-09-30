@@ -144,6 +144,19 @@ ENV/
 env.bak/
 venv.bak/
 
+# Gmail tokens & credentials
+config/token.json
+config/token.pickle
+config/credentials.json
+token.pickle
+credentials.json
+
+# Data & logs
+data/raw/
+data/state.json
+logs/
+data/staged/
+
 # Spyder project settings
 .spyderproject
 .spyproject
